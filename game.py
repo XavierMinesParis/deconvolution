@@ -233,7 +233,6 @@ class Affichage():
         psf = np.loadtxt("data/psf/psf_pan_2d_30cm_from10cm.txt")
         psf = psf / psf.sum() # normalizing the psf
         for i in range(n_val):
-            print(i, end='\r')
             id_name = names[i][len(f"data/val/labels/"): -4]
             label = np.load("data/val/labels/" + id_name + ".npy")[0]
             input_ = np.load("data/val/images/" + id_name + ".npy")[0]
@@ -332,7 +331,7 @@ def menu():
     labels = [np.array(glob("data/train/labels/*.npy")),
               np.array(glob("data/val/labels/*.npy")),
               np.array(glob("data/test/labels/*.npy"))]
-    nombre_cote = int(4000/len(np.load(labels[0][0])[0]))
+    nombre_cote = int(4000/len(np.load(labels[2][0])[0]))
     cartes = list(glob("data/satellite_images/*.tif"))
     n_cartes = len(cartes)
     train_ids, val_ids, test_ids = {}, {}, {}
@@ -636,7 +635,7 @@ def test2(vrai_ecran, ajout = ("", 11)):
 
 
 def jeu(id_name, folder, vrai_ecran):
-    print(id_name)
+    print("id", id_name)
     label = np.load("data/" + folder + "/labels/" + id_name + ".npy")[0]
     #low_label = cv2.resize(label[1: : 3, 1: : 3], label.shape, interpolation = cv2.INTER_CUBIC)
     input_ = np.load("data/" + folder + "/images/" + id_name + ".npy")[0]
@@ -661,7 +660,6 @@ def jeu(id_name, folder, vrai_ecran):
             else:
                 output_tensor = network(torch.from_numpy(input_).float()[None, None, ...])
             output = output_tensor.detach().numpy()[0][0]
-            print(np.mean(label), np.mean(output))
             io.imsave("examples/" + name + ".jpg", output)
             outputs.append(output)
     psf = np.loadtxt("data/psf/psf_pan_2d_30cm_from10cm.txt")
